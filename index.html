@@ -175,7 +175,7 @@
     </script>
     <script>
         function BusuanziCallback() {
-            let num = parseInt(document.getElementById("busuanzi_value_site_pv")?.textContent) || 0;
+            let num = parseInt("busuanzi_value_site_pv");
             document.getElementById("my-visit-num").textContent = num;
         }
     </script>
@@ -183,7 +183,7 @@
 <body>
     <div class="language-switch">
         <p data-lang="en" style="display:none;">Visit num: <span id="my-visit-num"></span></p>
-        <p>访问次数：<span id="my-visit-num">0</span></p>
+        <p data-lang="zh" style="display:none;">访问次数：<span id="my-visit-num"></span></p>
         <select onchange="switchLanguage(this.value)" style="padding: 6px; border-radius: 4px;">
             <option value="zh">中文</option>
             <option value="en" selected>English</option>
