@@ -6,14 +6,31 @@
     <title>周浩然 (Isaaczhr) - 个人主页</title>
     <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <style>
+        :root {
+            --light-bg: linear-gradient(to right, #1f4037, #99f2c8);
+            --light-color: #fff;
+            --dark-bg: #111;
+            --dark-color: #ccc;
+        }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #1f4037, #99f2c8);
-            color: #fff;
+            background: var(--light-bg);
+            color: var(--light-color);
             text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--dark-bg);
+                color: var(--dark-color);
+            }
+            .content {
+                background: #222;
+                color: #ccc;
+            }
         }
         .container {
             display: flex;
