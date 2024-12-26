@@ -173,17 +173,14 @@
             switchLanguage('en'); // 默认显示英文
         });
     </script>
-    <script>
-        function BusuanziCallback() {
-            let num = parseInt("busuanzi_value_site_pv");
-            document.getElementById("my-visit-num").textContent = num;
-        }
-    </script>
 </head>
 <body>
     <div class="language-switch">
-        <p data-lang="en" style="display:none;">Visit num: <span id="my-visit-num"></span></p>
-        <p data-lang="zh" style="display:none;">访问次数：<span id="my-visit-num"></span></p>
+        <p>
+            <p data-lang="en" style="display:none;">Visit num: </p>
+            <p data-lang="zh" style="display:none;">访问次数：</p>
+            <span id="busuanzi_value_site_pv"></span>
+        </p>
         <select onchange="switchLanguage(this.value)" style="padding: 6px; border-radius: 4px;">
             <option value="zh">中文</option>
             <option value="en" selected>English</option>
