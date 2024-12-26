@@ -160,8 +160,10 @@
 <body>
     <div class="language-switch">
         本站总访问<span id="busuanzi_value_site_pv"></span>次
-        <button onclick="switchLanguage('zh')">中文</button>
-        <button onclick="switchLanguage('en')">English</button>
+        <select onchange="switchLanguage(this.value)" style="padding: 6px; border-radius: 4px;">
+            <option value="zh">中文</option>
+            <option value="en" selected>English</option>
+        </select>
     </div>
 
     <div class="container">
