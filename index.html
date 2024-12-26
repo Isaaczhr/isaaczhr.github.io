@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周浩然 (Isaaczhr) - 个人主页</title>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #1f4037, #99f2c8);
+            color: #fff;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+        p {
+            font-size: 1.2em;
+            margin: 10px 0 20px;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 1em;
+            color: white;
+            background-color: #ff4b5c;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #ff1c2e;
+        }
+        .social-icons {
+            margin-top: 20px;
+        }
+        .social-icons a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+        .social-icons a:hover {
+            transform: scale(1.2);
+        }
+        .language-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        .language-switch button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            font-size: 16px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+        .language-switch button:hover {
+            background-color: #555;
+        }
+        .content {
+            padding: 20px;
+            background: #fff;
+            color: #333;
+            text-align: left;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .content h2 {
+            color: #333;
+            border-bottom: 2px solid #99f2c8;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .profile-img {
+            float: left;
+            margin-right: 20px;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+            .profile-img {
+                float: none;
+                display: block;
+                margin: 0 auto 20px;
+            }
+            .container {
+                width: 95%;
+            }
+        }
+        .content section {
+            min-width: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        @media (max-width: 768px) {
+            .content section {
+                min-width: auto;
+                padding: 10px 0;
+            }
+        }
+</style>
+    </style>
+    <script>
+        function switchLanguage(language) {
+            const elements = document.querySelectorAll('[data-lang]');
+            elements.forEach(element => {
+                if (element.dataset.lang === language) {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            switchLanguage('en'); // 默认显示英文
+        });
+    </script>
+</head>
+<body>
+    <div class="language-switch">
+        <button onclick="switchLanguage('zh')">中文</button>
+        <button onclick="switchLanguage('en')">English</button>
+	本站总访问<span id="busuanzi_value_site_pv"></span>次
+    </div>
+
+    <div class="container">
+        <h1 data-lang="zh">欢迎来到我的个人主页</h1>
+        <h1 data-lang="en" style="display:none;">Welcome to My Personal Homepage</h1>
+        <p data-lang="zh">我是周浩然，这里是我的个人主页。</p>
+        <p data-lang="en" style="display:none;">I am Zhou Haoran, this is my personal homepage.</p>
+        <a href="#about-me" class="button" data-lang="zh">了解更多关于我</a>
+        <a href="#about-me" class="button" data-lang="en" style="display:none;">Learn more about me</a>
+        <div class="social-icons">
+            <a href="https://github.com/Isaaczhr" target="_blank">GitHub</a>
+            <a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">QQ</a>
+            <a href="https://t.me/+8617333211724" target="_blank">Telegram</a>
+            <a href="mailto:isaaczhrms@outlook.com" target="_blank">Email</a>
+        </div>
+    </div>
+
+    <div class="content container clearfix">
+        <section id="about-me">
+            <h2 data-lang="zh">关于我</h2>
+            <h2 data-lang="en" style="display:none;">About Me</h2>
+            <img src="https://avatars.githubusercontent.com/u/75886381?v=4" alt="Profile Image" class="profile-img">
+            <p data-lang="zh">我是周浩然，中国科学技术大学的学生。</p>
+            <p data-lang="en" style="display:none;">I am Zhou Haoran, a student at the University of Science and Technology of China.</p>
+        </section>
+
+        <section id="education">
+            <h2 data-lang="zh">教育背景</h2>
+            <h2 data-lang="en" style="display:none;">Education</h2>
+            <p data-lang="zh"><strong>大学:</strong> 中国科学技术大学</p>
+            <p data-lang="en" style="display:none;"><strong>University:</strong> University of Science and Technology of China</p>
+            <p data-lang="zh"><strong>地点:</strong> 中国安徽合肥</p>
+            <p data-lang="en" style="display:none;"><strong>Location:</strong> Hefei, Anhui, China</p>
+        </section>
+
+        <section id="projects">
+            <h2 data-lang="zh">项目</h2>
+            <h2 data-lang="en" style="display:none;">Projects</h2>
+            <p data-lang="zh"><strong>VoidDefense:</strong> 一个用GDScript编写的游戏。<a href="https://github.com/Isaaczhr/VoidDefense" target="_blank">查看Debug项目</a></p>
+            <p data-lang="en" style="display:none;"><strong>VoidDefense:</strong> A game written in GDScript. <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank">View Debug Project</a></p>
+        </section>
+
+        <section id="contacts">
+            <h2 data-lang="zh">联系方式</h2>
+            <h2 data-lang="en" style="display:none;">Contacts</h2>
+            <p data-lang="zh"><a href="https://github.com/Isaaczhr" target="_blank">GitHub</a></p>
+            <p data-lang="en" style="display:none;"><a href="https://github.com/Isaaczhr" target="_blank">GitHub</a></p>
+            <p data-lang="zh"><a href="https://t.me/+8617333211724" target="_blank">电报</a></p>
+            <p data-lang="en" style="display:none;"><a href="https://t.me/+8617333211724" target="_blank">Telegram</a></p>
+            <p data-lang="zh"><a href="mailto:isaaczhrms@outlook.com" target="_blank">邮箱: isaaczhrms@outlook.com</a></p>
+            <p data-lang="en" style="display:none;"><a href="mailto:isaaczhrms@outlook.com" target="_blank">Email: isaaczhrms@outlook.com</a></p>
+            <p data-lang="zh"><a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">QQ: 3225293665</a></p>
+            <p data-lang="en" style="display:none;"><a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">QQ: 3225293665</a></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>Isaaczhr &copy; 2024</p>
+    </footer>
+</body>
+</html>
