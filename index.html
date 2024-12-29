@@ -53,19 +53,17 @@
             margin: 10px 0 20px;
         }
         .button {
-            display: inline-block;
-            text-decoration: none;
-            background-color: #ff4b5c;
-            color: white;
             padding: 15px 30px;
             font-size: 1em;
+            color: white;
+            background-color: #ff4b5c;
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
         .button:hover {
-            transform: translateY(-5px);
             background-color: #ff1c2e;
         }
         .social-icons {
@@ -82,33 +80,10 @@
             transform: scale(1.2);
         }
         .language-switch {
-            position: absolute;
+            position: fixed;
             top: 20px;
-            right: 20px; /* 根据需要调整，确保不超出屏幕 */
-            display: flex;
-            gap: 12px; /* 控件之间的间隔 */
-            align-items: center;
-            z-index: 1000; /* 确保在页面之上 */
-            max-width: 180px; /* 调整最大宽度以适应屏幕 */
-        }
-
-        @media (max-width: 600px) {
-            .language-switch {
-                right: 10px; /* 小屏幕调整右边距 */
-                max-width: 150px; /* 小屏幕调整宽度 */
-            }
-        }
-        .language-switch .site-views-card,
-        .language-switch .custom-dropdown {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 100%; /* 确保子元素宽度一致 */
-            /* 移除默认下拉箭头 */
-            appearance: none;
-            background-image: none;
+            right: 20px;
+            z-index: 1000;
         }
         .language-switch button {
             padding: 10px 20px;
@@ -119,8 +94,9 @@
             font-size: 16px;
             margin-left: 10px;
             border-radius: 5px;
-            /* 移除额外的下拉箭头 */
-            background-image: none;
+        }
+        .language-switch button:hover {
+            background-color: #555;
         }
         .content {
             padding: 20px;
@@ -283,171 +259,15 @@
             text-decoration: underline;
         }
 
-        /* 让外层和内层按钮背景统一，避免“卡片套卡片”现象 */
-        .language-switch .custom-dropdown {
-            background-color: transparent; /* 去掉白色背景，让按钮本身就是可点击卡片 */
-            box-shadow: none;             /* 去掉外层阴影 */
-            padding: 0;                   /* 去掉多余内边距 */
-            border-radius: 0;             /* 移除圆角，避免与按钮冲突 */
-        }
-
-        /* 如果想保持按钮是“卡片”风格，就直接设置按钮背景为白底灰字 */
-        .custom-dropdown-button {
-            background-color: #fff;
-            color: #333;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px 16px;
-            cursor: pointer;
-            min-width: 80px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* 下拉框显示内容仍然使用卡片样式 */
-        .custom-dropdown-content {
-            background-color: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            /* ...其他下拉框样式... */
-        }
-
-        /* 统一语言选择框和访问量卡片的样式 */
-        .language-switch .site-views-card,
-        .language-switch .custom-dropdown-button {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid #ccc;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        /* 移除自定义下拉菜单的背景和阴影 */
-        .language-switch .custom-dropdown {
-            background-color: transparent;
-            box-shadow: none;
-            padding: 0;
-            border-radius: 0;
-        }
-
-        /* 保持下拉内容的卡片样式 */
-        .custom-dropdown-content {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 5px;
-            z-index: 1;
-        }
-
-        /* 按钮悬停效果 */
-        .language-switch .site-views-card:hover,
-        .language-switch .custom-dropdown-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        /* 调整下拉按钮内的箭头 */
-        .custom-dropdown-button::after {
-            content: '▼';
-            margin-left: 10px;
-            font-size: 12px;
-        }
-
-        /* 确保下拉内容中的选项样式一致 */
-        .custom-dropdown-content div {
-            color: #333;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .custom-dropdown-content div:hover {
-            background-color: #f1f1f1;
-        }
-
-        /* 通用卡片样式 */
-        .control-card {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid #ccc;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.3s, box-shadow 0.3s;
-            min-width: 150px; /* 根据需要调整宽度 */
-        }
-
-        /* 悬停效果 */
-        .control-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        /* 语言切换按钮样式 */
-        .custom-dropdown-button {
-            background-color: transparent; /* 背景透明，继承 .control-card 的背景 */
-            border: none;
-            color: inherit;
-            padding: 0;
-            margin: 0;
-            font: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            cursor: pointer;
-        }
-
-        /* 移除自定义下拉菜单的背景和阴影 */
-        .language-switch .custom-dropdown {
-            background-color: transparent;
-            box-shadow: none;
-            padding: 0;
-            border-radius: 0;
-        }
-
-        /* 下拉内容的卡片样式 */
-        .custom-dropdown-content {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 5px;
-            z-index: 1;
-            position: absolute;
-            right: 0;
-            width: 150px; /* 与 .control-card 一致的宽度 */
-        }
-
-        .custom-dropdown-content div {
-            color: #333;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .custom-dropdown-content div:hover {
-            background-color: #f1f1f1;
-        }
-
-        /* 确保语言切换和访问量卡片在移动端不遮挡文字 */
-        @media (max-width: 768px) {
-            .language-switch {
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
+        @media (max-width: 600px) {
+            .footer {
+                display: flex;
                 flex-direction: column;
-                gap: 10px;
+                align-items: center;
+            }
+
+            .language-selection, .view-count {
+                margin: 10px 0;
             }
         }
 </style>
@@ -469,15 +289,10 @@
 </head>
 <body>
     <div class="language-switch">
-        <div class="control-card site-views-card">
-            <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
-            <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
-        </div>
+        <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
+        <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
         <div class="custom-dropdown" id="langDropdown">
-            <button class="custom-dropdown-button control-card" id="currentLang">
-                English
-                <span>&#9662;</span> <!-- 下拉箭头 -->
-            </button>
+            <button class="custom-dropdown-button" id="currentLang">English</button>
             <div class="custom-dropdown-content">
                 <div data-value="zh">中文</div>
                 <div data-value="en">English</div>
@@ -486,10 +301,10 @@
     </div>
 
     <div class="container">
-        <h1 data-lang="zh">欢迎来到周浩然的个人主页</h1>
-        <h1 data-lang="en" style="display:none;">Welcome to Isaac's Personal Homepage</h1>
+        <h1 data-lang="zh">欢迎来到我的个人主页</h1>
+        <h1 data-lang="en" style="display:none;">Welcome to My Personal Homepage</h1>
         <p data-lang="zh">我是周浩然，这里是我的个人主页。</p>
-        <p data-lang="en" style="display:none;">I am Isaac Zhou, this is my personal homepage.</p>
+        <p data-lang="en" style="display:none;">I am Zhou Haoran, this is my personal homepage.</p>
         <a href="#about-me" class="button" data-lang="zh">了解更多关于我</a>
         <a href="#about-me" class="button" data-lang="en" style="display:none;">Learn more about me</a>
     </div>
@@ -499,7 +314,7 @@
             <h2 data-lang="zh">关于我</h2>
             <h2 data-lang="en" style="display:none;">About Me</h2>
             <p data-lang="zh">我是周浩然，中国科学技术大学的学生。</p>
-            <p data-lang="en" style="display:none;">I am Isaac Zhou, a student at USTC.</p>
+            <p data-lang="en" style="display:none;">I am Zhou Haoran, a student at USTC.</p>
         </div>
         <div class="card">
             <h2 data-lang="zh">教育背景</h2>
@@ -542,25 +357,35 @@
     </div>
 
     <footer>
+        <div class="language-switch">
+            <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
+            <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
+            <div class="custom-dropdown" id="langDropdown">
+                <button class="custom-dropdown-button" id="currentLang">English</button>
+                <div class="custom-dropdown-content">
+                    <!-- 下拉菜单内容 -->
+                </div>
+            </div>
+        </div>
         <p>Isaaczhr &copy; 2024</p>
     </footer>
     <script>
         const dropdown = document.getElementById('langDropdown');
         const currentLangBtn = document.getElementById('currentLang');
-        dropdown.addEventListener('click', (e) => {
-            e.stopPropagation(); // 防止事件冒泡
+        dropdown.addEventListener('click', () => {
             dropdown.classList.toggle('show');
         });
-        window.addEventListener('click', function(e) {
-            if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('show');
+        window.onclick = function(e) {
+            if (!e.target.matches('#currentLang')) {
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
             }
-        });
+        }
         document.querySelectorAll('.custom-dropdown-content div').forEach(item => {
             item.addEventListener('click', (e) => {
-                currentLangBtn.innerHTML = `${item.textContent} <span>&#9662;</span>`;
+                currentLangBtn.textContent = item.textContent;
                 switchLanguage(item.getAttribute('data-value'));
-                dropdown.classList.remove('show');
             });
         });
     </script>
