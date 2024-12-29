@@ -82,10 +82,27 @@
             transform: scale(1.2);
         }
         .language-switch {
-            position: fixed;
+            position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 1000;
+            display: flex;
+            gap: 12px; /* 控件之间的间隔 */
+            align-items: center;
+            z-index: 1000; /* 确保在页面之上 */
+        }
+        .language-switch .site-views-card,
+        .language-switch .custom-dropdown {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .language-switch p {
+            margin: 0;
+        }
+        .custom-dropdown-button {
+            min-width: 80px;
         }
         .language-switch button {
             padding: 10px 20px;
@@ -260,6 +277,95 @@
             color: #45a049;
             text-decoration: underline;
         }
+
+        /* 让外层和内层按钮背景统一，避免“卡片套卡片”现象 */
+        .language-switch .custom-dropdown {
+            background-color: transparent; /* 去掉白色背景，让按钮本身就是可点击卡片 */
+            box-shadow: none;             /* 去掉外层阴影 */
+            padding: 0;                   /* 去掉多余内边距 */
+            border-radius: 0;             /* 移除圆角，避免与按钮冲突 */
+        }
+
+        /* 如果想保持按钮是“卡片”风格，就直接设置按钮背景为白底灰字 */
+        .custom-dropdown-button {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 16px;
+            cursor: pointer;
+            min-width: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 下拉框显示内容仍然使用卡片样式 */
+        .custom-dropdown-content {
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            /* ...其他下拉框样式... */
+        }
+
+        /* 统一语言选择框和访问量卡片的样式 */
+        .language-switch .site-views-card,
+        .language-switch .custom-dropdown-button {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #ccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        /* 移除自定义下拉菜单的背景和阴影 */
+        .language-switch .custom-dropdown {
+            background-color: transparent;
+            box-shadow: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        /* 保持下拉内容的卡片样式 */
+        .custom-dropdown-content {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 5px;
+            z-index: 1;
+        }
+
+        /* 按钮悬停效果 */
+        .language-switch .site-views-card:hover,
+        .language-switch .custom-dropdown-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 调整下拉按钮内的箭头 */
+        .custom-dropdown-button::after {
+            content: '▼';
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        /* 确保下拉内容中的选项样式一致 */
+        .custom-dropdown-content div {
+            color: #333;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .custom-dropdown-content div:hover {
+            background-color: #f1f1f1;
+        }
 </style>
     <script>
         function switchLanguage(language) {
@@ -279,8 +385,10 @@
 </head>
 <body>
     <div class="language-switch">
-        <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
-        <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
+        <div class="site-views-card">
+            <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
+            <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
+        </div>
         <div class="custom-dropdown" id="langDropdown">
             <button class="custom-dropdown-button" id="currentLang">English</button>
             <div class="custom-dropdown-content">
@@ -366,6 +474,7 @@
             item.addEventListener('click', (e) => {
                 currentLangBtn.textContent = item.textContent;
                 switchLanguage(item.getAttribute('data-value'));
+                dropdown.classList.remove('show');
             });
         });
     </script>
