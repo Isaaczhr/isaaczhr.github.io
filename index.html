@@ -258,18 +258,6 @@
             color: #45a049;
             text-decoration: underline;
         }
-
-        @media (max-width: 600px) {
-            .footer {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .language-selection, .view-count {
-                margin: 10px 0;
-            }
-        }
 </style>
     <script>
         function switchLanguage(language) {
@@ -357,16 +345,6 @@
     </div>
 
     <footer>
-        <div class="language-switch">
-            <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
-            <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
-            <div class="custom-dropdown" id="langDropdown">
-                <button class="custom-dropdown-button" id="currentLang">English</button>
-                <div class="custom-dropdown-content">
-                    <!-- 下拉菜单内容 -->
-                </div>
-            </div>
-        </div>
         <p>Isaaczhr &copy; 2024</p>
     </footer>
     <script>
