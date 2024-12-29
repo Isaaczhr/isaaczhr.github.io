@@ -80,24 +80,76 @@
             transform: scale(1.2);
         }
         .language-switch {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
+            margin-top: 20px;
+            text-align: center;
         }
-        .language-switch button {
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            background-color: #333;
-            color: #fff;
+        .language-switch p {
+            margin: 5px 0;
+        }
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
             font-size: 16px;
             margin-left: 10px;
-            border-radius: 5px;
         }
-        .language-switch button:hover {
-            background-color: #555;
+
+        .custom-dropdown-button {
+            background-color: #333;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            min-width: 100px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
+        .custom-dropdown-button::after {
+            content: '▼';
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .custom-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 100px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 5px;
+            z-index: 1;
+        }
+
+        .custom-dropdown-content div {
+            color: #333;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .custom-dropdown-content div:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-dropdown.show .custom-dropdown-content {
+            display: block;
+        }
+
+        /* 优化超链接文本格式 */
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #45a049;
+            text-decoration: underline;
+        }
+
         .content {
             padding: 20px;
             background: #fff;
@@ -165,10 +217,9 @@
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
-            gap: 20px; /* 卡片之间的间距 */
-            align-items: flex-start; /* 允许卡片高度不一致 */
+            gap: 20px; 
+            align-items: flex-start; 
         }
-        /* 卡片样式 */
         .card {
             background-color: #fff;
             color: #333;
@@ -180,7 +231,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             text-align: left;
             min-width: 250px;
-            max-width: 400px; /* 允许卡片大小不同 */
+            max-width: 400px; 
         }
         .card:hover {
             transform: translateY(-10px);
@@ -189,76 +240,10 @@
         .card h2, .card p, .card ul {
             margin: 20px;
         }
-        /* 隐藏多语言元素的小调整，保留已有逻辑 */
         [data-lang="zh"], [data-lang="en"] {
             display: none;
         }
-
-        /* 自定义下拉菜单样式 */
-        .custom-dropdown {
-            position: relative;
-            display: inline-block;
-            font-size: 16px;
-            margin-left: 10px;
-        }
-
-        .custom-dropdown-button {
-            background-color: #333;
-            color: #fff;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            min-width: 100px;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .custom-dropdown-button::after {
-            content: '▼';
-            margin-left: 10px;
-            font-size: 12px;
-        }
-
-        .custom-dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            min-width: 100px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border-radius: 4px;
-            margin-top: 5px;
-            z-index: 1;
-        }
-
-        .custom-dropdown-content div {
-            color: #333;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .custom-dropdown-content div:hover {
-            background-color: #f1f1f1;
-        }
-
-        .custom-dropdown.show .custom-dropdown-content {
-            display: block;
-        }
-
-        /* 优化超链接文本格式 */
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        a:hover {
-            color: #45a049;
-            text-decoration: underline;
-        }
-</style>
+    </style>
     <script>
         function switchLanguage(language) {
             const elements = document.querySelectorAll('[data-lang]');
@@ -276,25 +261,13 @@
     </script>
 </head>
 <body>
-    <div class="language-switch">
-        <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
-        <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
-        <div class="custom-dropdown" id="langDropdown">
-            <button class="custom-dropdown-button" id="currentLang">English</button>
-            <div class="custom-dropdown-content">
-                <div data-value="zh">中文</div>
-                <div data-value="en">English</div>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <h1 data-lang="zh">欢迎来到我的个人主页</h1>
         <h1 data-lang="en" style="display:none;">Welcome to My Personal Homepage</h1>
         <p data-lang="zh">我是周浩然，这里是我的个人主页。</p>
         <p data-lang="en" style="display:none;">I am Zhou Haoran, this is my personal homepage.</p>
-        <a href="#about-me" class="button" data-lang="zh">了解更多关于我</a>
-        <a href="#about-me" class="button" data-lang="en" style="display:none;">Learn more about me</a>
+        <a href="https://github.com/Isaaczhr/"  target="_blank" class="button" data-lang="zh">了解更多关于我</a>
+        <a href="https://github.com/Isaaczhr/"  target="_blank" class="button" data-lang="en" style="display:none;">Learn more about me</a>
     </div>
 
     <div class="card-container">
@@ -315,14 +288,15 @@
             <h2 data-lang="en" style="display:none;">Projects</h2>
             <p data-lang="zh"><strong>VoidDefense:</strong> 用GDScript编写的游戏。</p>
             <p data-lang="en" style="display:none;"><strong>VoidDefense:</strong> A game in GDScript.</p>
-            <ul>
+            <ul data-lang="zh">
                 <li>
-                    <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank" data-lang="zh">VoidDefense (GDScript项目)</a>
-                    <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank" data-lang="en" style="display:none;">VoidDefense (GDScript project)</a>
+                    <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank">VoidDefense (GDScript项目)</a>
+
                 </li>
+            </ul>
+            <ul data-lang="en">
                 <li>
-                    <a href="#" target="_blank" data-lang="zh">我的新项目</a>
-                    <a href="#" target="_blank" data-lang="en" style="display:none;">My New Project</a>
+                    <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank">VoidDefense (GDScript project)</a>
                 </li>
             </ul>
         </div>
@@ -345,6 +319,17 @@
     </div>
 
     <footer>
+        <div class="language-switch">
+            <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
+            <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
+            <div class="custom-dropdown" id="langDropdown">
+                <button class="custom-dropdown-button" id="currentLang">English</button>
+                <div class="custom-dropdown-content">
+                    <div data-value="zh">中文</div>
+                    <div data-value="en">English</div>
+                </div>
+            </div>
+        </div>
         <p>Isaaczhr &copy; 2024</p>
     </footer>
     <script>
