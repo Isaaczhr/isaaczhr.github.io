@@ -83,6 +83,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
+            z-index: 1000;
         }
         .language-switch button {
             padding: 10px 20px;
@@ -164,6 +165,8 @@
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
+            gap: 20px; /* 卡片之间的间距 */
+            align-items: flex-start; /* 允许卡片高度不一致 */
         }
         /* 卡片样式 */
         .card {
@@ -176,17 +179,84 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
             text-align: left;
+            min-width: 250px;
+            max-width: 400px; /* 允许卡片大小不同 */
         }
         .card:hover {
             transform: translateY(-10px);
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
-        .card h2, .card p {
+        .card h2, .card p, .card ul {
             margin: 20px;
         }
         /* 隐藏多语言元素的小调整，保留已有逻辑 */
         [data-lang="zh"], [data-lang="en"] {
             display: none;
+        }
+
+        /* 自定义下拉菜单样式 */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .custom-dropdown-button {
+            background-color: #333;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            min-width: 100px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-dropdown-button::after {
+            content: '▼';
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .custom-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 100px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 5px;
+            z-index: 1;
+        }
+
+        .custom-dropdown-content div {
+            color: #333;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .custom-dropdown-content div:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-dropdown.show .custom-dropdown-content {
+            display: block;
+        }
+
+        /* 优化超链接文本格式 */
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #45a049;
+            text-decoration: underline;
         }
 </style>
     <script>
@@ -207,34 +277,24 @@
 </head>
 <body>
     <div class="language-switch">
-        <p>
-            <p data-lang="en" style="display:none;">Visit num: </p>
-            <p data-lang="zh" style="display:none;">访问次数：</p>
-            <span id="busuanzi_value_site_pv"></span>
-        </p>
-        <select onchange="switchLanguage(this.value)" style="padding: 6px; border-radius: 4px;">
-            <option value="zh">中文</option>
-            <option value="en" selected>English</option>
-        </select>
-    </div>
-
-    <div class="header">
-        <h1>我的个人主页</h1>
+        <p data-lang="zh" style="display:none;">访问次数：<span id="busuanzi_value_site_pv"></span></p>
+        <p data-lang="en">Visit num: <span id="busuanzi_value_site_pv"></span></p>
+        <div class="custom-dropdown" id="langDropdown">
+            <button class="custom-dropdown-button" id="currentLang">English</button>
+            <div class="custom-dropdown-content">
+                <div data-value="zh">中文</div>
+                <div data-value="en">English</div>
+            </div>
+        </div>
     </div>
 
     <div class="container">
-        <h1 data-lang="zh">欢迎来到我的个人主页</h1>
-        <h1 data-lang="en" style="display:none;">Welcome to My Personal Homepage</h1>
+        <h1 data-lang="zh">欢迎来到周浩然的个人主页</h1>
+        <h1 data-lang="en" style="display:none;">Welcome to Isaac's Personal Homepage</h1>
         <p data-lang="zh">我是周浩然，这里是我的个人主页。</p>
-        <p data-lang="en" style="display:none;">I am Zhou Haoran, this is my personal homepage.</p>
+        <p data-lang="en" style="display:none;">I am Isaac Zhou, this is my personal homepage.</p>
         <a href="#about-me" class="button" data-lang="zh">了解更多关于我</a>
         <a href="#about-me" class="button" data-lang="en" style="display:none;">Learn more about me</a>
-        <div class="social-icons">
-            <a href="https://github.com/Isaaczhr" target="_blank">GitHub</a>
-            <a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">QQ</a>
-            <a href="https://t.me/+8617333211724" target="_blank">Telegram</a>
-            <a href="mailto:isaaczhrms@outlook.com" target="_blank">Email</a>
-        </div>
     </div>
 
     <div class="card-container">
@@ -242,7 +302,7 @@
             <h2 data-lang="zh">关于我</h2>
             <h2 data-lang="en" style="display:none;">About Me</h2>
             <p data-lang="zh">我是周浩然，中国科学技术大学的学生。</p>
-            <p data-lang="en" style="display:none;">I am Zhou Haoran, a student at USTC.</p>
+            <p data-lang="en" style="display:none;">I am Isaac Zhou, a student at USTC.</p>
         </div>
         <div class="card">
             <h2 data-lang="zh">教育背景</h2>
@@ -255,26 +315,57 @@
             <h2 data-lang="en" style="display:none;">Projects</h2>
             <p data-lang="zh"><strong>VoidDefense:</strong> 用GDScript编写的游戏。</p>
             <p data-lang="en" style="display:none;"><strong>VoidDefense:</strong> A game in GDScript.</p>
+            <ul>
+                <li>
+                    <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank" data-lang="zh">VoidDefense (GDScript项目)</a>
+                    <a href="https://github.com/Isaaczhr/VoidDefense" target="_blank" data-lang="en" style="display:none;">VoidDefense (GDScript project)</a>
+                </li>
+                <li>
+                    <a href="#" target="_blank" data-lang="zh">我的新项目</a>
+                    <a href="#" target="_blank" data-lang="en" style="display:none;">My New Project</a>
+                </li>
+            </ul>
         </div>
-    </div>
-
-    <div class="content container clearfix">
-        <section id="contacts">
+        <div class="card">
             <h2 data-lang="zh">联系方式</h2>
-            <h2 data-lang="en" style="display:none;">Contacts</h2>
-            <p data-lang="zh"><a href="https://github.com/Isaaczhr" target="_blank">GitHub</a></p>
-            <p data-lang="en" style="display:none;"><a href="https://github.com/Isaaczhr" target="_blank">GitHub</a></p>
-            <p data-lang="zh"><a href="https://t.me/+8617333211724" target="_blank">电报</a></p>
-            <p data-lang="en" style="display:none;"><a href="https://t.me/+8617333211724" target="_blank">Telegram</a></p>
-            <p data-lang="zh"><a href="mailto:isaaczhrms@outlook.com" target="_blank">邮箱: isaaczhrms@outlook.com</a></p>
-            <p data-lang="en" style="display:none;"><a href="mailto:isaaczhrms@outlook.com" target="_blank">Email: isaaczhrms@outlook.com</a></p>
-            <p data-lang="zh"><a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">QQ: 3225293665</a></p>
-            <p data-lang="en" style="display:none;"><a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">QQ: 3225293665</a></p>
-        </section>
+            <h2 data-lang="en" style="display:none;">Contact</h2>
+            <p data-lang="zh">
+                <strong>GitHub：</strong><a href="https://github.com/Isaaczhr" target="_blank">Isaaczhr</a><br>
+                <strong>QQ：</strong><a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">联系我</a><br>
+                <strong>Telegram：</strong><a href="https://t.me/+8617333211724" target="_blank">联系我</a><br>
+                <strong>邮箱：</strong><a href="mailto:isaaczhrms@outlook.com" target="_blank">发送邮件</a>
+            </p>
+            <p data-lang="en" style="display:none;">
+                <strong>GitHub:</strong> <a href="https://github.com/Isaaczhr" target="_blank">Isaaczhr</a><br>
+                <strong>QQ:</strong> <a href="https://qm.qq.com/q/d2iGLQ7vx0" target="_blank">Contact Me</a><br>
+                <strong>Telegram:</strong> <a href="https://t.me/+8617333211724" target="_blank">Contact Me</a><br>
+                <strong>Email:</strong> <a href="mailto:isaaczhrms@outlook.com" target="_blank">Send an Email</a>
+            </p>
+        </div>
     </div>
 
     <footer>
         <p>Isaaczhr &copy; 2024</p>
     </footer>
+    <script>
+        const dropdown = document.getElementById('langDropdown');
+        const currentLangBtn = document.getElementById('currentLang');
+        dropdown.addEventListener('click', () => {
+            dropdown.classList.toggle('show');
+        });
+        window.onclick = function(e) {
+            if (!e.target.matches('#currentLang')) {
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+        document.querySelectorAll('.custom-dropdown-content div').forEach(item => {
+            item.addEventListener('click', (e) => {
+                currentLangBtn.textContent = item.textContent;
+                switchLanguage(item.getAttribute('data-value'));
+            });
+        });
+    </script>
 </body>
 </html>
