@@ -144,11 +144,24 @@
             color: #333;
             padding: 8px 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .custom-dropdown-content div:hover {
             background-color: #f1f1f1;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .custom-dropdown-content {
+            background-color: #333;
+            }
+            .custom-dropdown-content div {
+            color: #fff;
+            }
+            .custom-dropdown-content div:hover {
+            background-color: #444;
+            color: #fff;
+            }
         }
 
         .custom-dropdown.show .custom-dropdown-content {
@@ -261,6 +274,12 @@
             text-align: left;
             min-width: 250px;
             max-width: 400px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .card {
+            background-color: #222;
+            color: #ccc;
+            }
         }
 
         .card:hover {
