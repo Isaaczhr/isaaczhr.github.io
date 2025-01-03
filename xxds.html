@@ -427,14 +427,17 @@
             // 创建左侧矩阵容器
             const matrixContainer = document.createElement('div');
             matrixContainer.style.display = 'flex';
+            matrixContainer.style.flexWrap = 'wrap'; // 改为换行
             matrixContainer.style.gap = '20px';
+            matrixContainer.style.justifyContent = 'center';
             flexContainer.appendChild(matrixContainer);
 
             // 创建矩阵输入块
             for (let i = 0; i < needed; i++) {
             const section = document.createElement('div');
             section.className = 'matrix-section';
-            section.style.flex = '0 0 300px'; // 固定宽度，不伸缩
+            //section.style.flex = '0 0 300px'; // 固定宽度，不伸缩
+            section.flexWrap = 'wrap';
             section.innerHTML = `
             <h3>矩阵 ${String.fromCharCode(65 + i)}</h3>
             <div class="matrix-controls">
