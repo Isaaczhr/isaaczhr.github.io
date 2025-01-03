@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+</html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isaac的线性代数工具箱</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background: #0078D7;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table td {
+            padding: 5px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005bb5;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            background: #0078D7;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+
+        .tabs button:hover {
+            background: #005bb5;
+        }
+
+        .matrices-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            /* 居中 */
+            margin: 0 auto;
+        }
+
+        .matrix-section {
+            width: 300px;
+            /* 固定宽度使每个输入模块的大小一致 */
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .matrix-section h3 {
+            margin-top: 0;
+        }
+
+        /* 添加活跃选项卡样式 */
+        .tabs button.active {
+            background: #005bb5;
+        }
+    </style>
+    <script>
+        function generateMatrixInputs() {
+            const rows = parseInt(document.getElementById('rows').value);
+            const cols = parseInt(document.getElementById('cols').value);
+            const matrixContainer = document.getElementById('matrixContainer');
+            matrixContainer.innerHTML = ''; // 清空之前的矩阵
+
+            const table = document.createElement('table');
+            for (let i = 0; i < rows; i++) {
+                const tr = document.createElement('tr');
+                for (let j = 0; j < cols; j++) {
+                    const td = document.createElement('td');
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.placeholder = `a[${i + 1},${j + 1}]`;
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+            matrixContainer.appendChild(table);
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>在线线性代数工具</h1>
+        </header>
+        <body style="background: white;"></body>
+    <main>
+        <div class="tabs" style="margin: 10px 10%;">
+            <button onclick="showMatrixSections('det')">行列式</button>
+            <button onclick="showMatrixSections('inv')">逆矩阵</button>
+            <button onclick="showMatrixSections('trans')">转置</button>
+            <button onclick="showMatrixSections('add')">加法</button>
+            <button onclick="showMatrixSections('sub')">减法</button>
+            <button onclick="showMatrixSections('mul')">乘法</button>
+            <button onclick="showMatrixSections('pow')">幂运算</button>
+        </div>
+        <div id="matricesContainer" class="matrices-container">
+            <!-- 动态生成多个矩阵块，同时在此容器中也放置结果显示区 -->
+            <div id="calcPanel" style="width:100%; text-align:center; margin-top:20px;">
+                <button onclick="runCalculation()">计算</button>
+                <select id="resultSlot" style="margin-left:10px;">
+                    <option value="0">存储槽1</option>
+                    <option value="1">存储槽2</option>
+                    <option value="2">存储槽3</option>
+                    <option value="3">存储槽4</option>
+                    <option value="4">存储槽5</option>
+                    <option value="5">存储槽6</option>
+                    <option value="6">存储槽7</option>
+                    <option value="7">存储槽8</option>
+                    <option value="8">存储槽9</option>
+                </select>
+                <button id="storeResultBtn" onclick="storeResultToSlot()">存储结果</button>
+                <div id="calcResult" style="margin-top:10px; background:#f3f3f3; padding:10px;">
+                    <!-- 计算结果显示 -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        let matrixSlots = Array(9).fill(null);
+        let currentOperation = null;
+        let currentResult = null; // 存放计算结果(标量或矩阵)
+
+        // 页面加载后默认进入行列式计算
+        window.addEventListener('DOMContentLoaded', () => {
+            showMatrixSections('det');
+        });
+
+        function getCurrentMatrix() {
+            const rows = parseInt(document.getElementById('rows').value);
+            const cols = parseInt(document.getElementById('cols').value);
+            const inputs = document.getElementById('matrixContainer').getElementsByTagName('input');
+            const matrix = [];
+            for (let r = 0; r < rows; r++) {
+                const row = [];
+                for (let c = 0; c < cols; c++) {
+                    row.push(parseFloat(inputs[r * cols + c].value) || 0);
+                }
+                matrix.push(row);
+            }
+            return matrix;
+        }
+
+        function fillMatrix(mat) {
+            if (!mat) return;
+            const inputs = document.getElementById('matrixContainer').getElementsByTagName('input');
+            let index = 0;
+            for (let r = 0; r < mat.length; r++) {
+                for (let c = 0; c < mat[0].length; c++) {
+                    inputs[index++].value = mat[r][c];
+                }
+            }
+        }
+
+        function storeMatrix() {
+            const slot = parseInt(document.getElementById('storageSlot').value);
+            matrixSlots[slot] = getCurrentMatrix();
+            alert(`已存储到存储槽${slot + 1}`);
+        }
+
+        function loadMatrix() {
+            const slot = parseInt(document.getElementById('storageSlot').value);
+            if (!matrixSlots[slot]) {
+                alert("该槽位尚未存储矩阵");
+                return;
+            }
+            fillMatrix(matrixSlots[slot]);
+            alert(`已从存储槽${slot + 1}载入矩阵`);
+        }
+
+        // 计算矩阵的行列式
+        function detMatrix() {
+            const mat = getCurrentMatrix();
+            if (!isSquare(mat)) {
+                alert("矩阵不是方阵，无法计算行列式");
+                return;
+            }
+            alert(`行列式 = ${matrixDeterminant(mat)}`);
+        }
+
+        // 计算矩阵的逆
+        function invertMatrix() {
+            const mat = getCurrentMatrix();
+            if (!isSquare(mat)) {
+                alert("矩阵不是方阵，无法求逆");
+                return;
+            }
+            const det = matrixDeterminant(mat);
+            if (Math.abs(det) < 1e-10) {
+                alert("行列式为0，矩阵不可逆");
+                return;
+            }
+            const inv = matrixInverse(mat);
+            fillMatrix(inv);
+            alert("已将当前矩阵替换为其逆矩阵");
+        }
+
+        // 判断是否为方阵
+        function isSquare(matrix) {
+            return matrix.length === matrix[0].length;
+        }
+
+        // 计算行列式
+        function matrixDeterminant(matrix) {
+            const n = matrix.length;
+            if (n === 1) return matrix[0][0];
+            if (n === 2) {
+                return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            }
+            let det = 0;
+            for (let c = 0; c < n; c++) {
+                det += ((c % 2 === 0) ? 1 : -1)
+                    * matrix[0][c]
+                    * matrixDeterminant(minor(matrix, 0, c));
+            }
+            return det;
+        }
+
+        // 计算子矩阵
+        function minor(matrix, row, col) {
+            return matrix
+                .filter((_, i) => i !== row)
+                .map(r => r.filter((_, j) => j !== col));
+        }
+
+        // 计算逆矩阵（基于伴随矩阵方法）
+        function matrixInverse(matrix) {
+            const n = matrix.length;
+            const det = matrixDeterminant(matrix);
+            const adj = [];
+            for (let r = 0; r < n; r++) {
+                adj[r] = [];
+                for (let c = 0; c < n; c++) {
+                    // 余子式
+                    const m = minor(matrix, r, c);
+                    adj[r][c] = ((r + c) % 2 === 0 ? 1 : -1) * matrixDeterminant(m);
+                }
+            }
+            // 转置
+            for (let r = 0; r < n; r++) {
+                for (let c = r + 1; c < n; c++) {
+                    const temp = adj[r][c];
+                    adj[r][c] = adj[c][r];
+                    adj[c][r] = temp;
+                }
+            }
+            // adj/det
+            for (let r = 0; r < n; r++) {
+                for (let c = 0; c < n; c++) {
+                    adj[r][c] = adj[r][c] / det;
+                }
+            }
+            return adj;
+        }
+
+        let tabStates = {
+            'det': null,
+            'inv': null,
+            'trans': null,
+            'add': null,
+            'sub': null,
+            'mul': null,
+            'pow': null
+        };
+
+        function saveCurrentTabState() {
+            if (!currentOperation) return;
+            
+            const state = {
+                matrices: [], // 存储当前显示的所有矩阵数据
+                result: currentResult // 存储计算结果
+            };
+
+            // 保存所有显示的矩阵数据
+            const matrixBlocks = document.querySelectorAll('.matrix-input');
+            matrixBlocks.forEach(block => {
+                if (block.id) {
+                    state.matrices.push({
+                        id: block.id,
+                        data: getMatrixFromBlock(block.id)
+                    });
+                }
+            });
+
+            tabStates[currentOperation] = state;
+        }
+
+        function loadTabState(operation) {
+            const state = tabStates[operation];
+            if (!state) return;
+
+            // 恢复矩阵数据
+            state.matrices.forEach(matrix => {
+                const block = document.getElementById(matrix.id);
+                if (block) {
+                    const section = block.closest('.matrix-section');
+                    const rowSelect = section.querySelector('.row-select');
+                    const colSelect = section.querySelector('.col-select');
+                    
+                    // 设置矩阵维度
+                    rowSelect.value = matrix.data.length;
+                    colSelect.value = matrix.data[0].length;
+                    
+                    // 重新生成输入框并填充数据
+                    generateMatrixInputs(matrix.id, section);
+                    
+                    const inputs = block.querySelectorAll('input');
+                    matrix.data.forEach((row, i) => {
+                        row.forEach((val, j) => {
+                            inputs[i * row.length + j].value = val;
+                        });
+                    });
+                }
+            });
+
+            // 恢复计算结果
+            currentResult = state.result;
+            if (currentResult !== null) {
+                displayMatrix(currentResult, 'calcResult');
+            }
+        }
+
+        function showMatrixSections(operation) {
+            // 保存当前标签页状态
+            saveCurrentTabState();
+            
+            // 原有的showMatrixSections代码
+            currentOperation = operation;
+            const c = document.getElementById('matricesContainer');
+            c.innerHTML = '';
+
+            // 创建一个弹性容器来包装矩阵输入块和结果块
+            const flexContainer = document.createElement('div');
+            flexContainer.style.display = 'flex';
+            flexContainer.style.flexWrap = 'wrap'; // 改为换行
+            flexContainer.style.gap = '20px';
+            flexContainer.style.width = '100vw';
+            flexContainer.style.justifyContent = 'center';
+            c.appendChild(flexContainer);
+
+            // 更新选项卡的活跃状态
+            const tabs = document.querySelectorAll('.tabs button');
+            tabs.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.textContent === getOperationName(operation)) {
+            tab.classList.add('active');
+            }
+            });
+
+            const needed = (operation === 'add' || operation === 'sub' || operation === 'mul') ? 2 : 1;
+
+            // 创建左侧矩阵容器
+            const matrixContainer = document.createElement('div');
+            matrixContainer.style.display = 'flex';
+            matrixContainer.style.gap = '20px';
+            flexContainer.appendChild(matrixContainer);
+
+            // 创建矩阵输入块
+            for (let i = 0; i < needed; i++) {
+            const section = document.createElement('div');
+            section.className = 'matrix-section';
+            section.style.flex = '0 0 300px'; // 固定宽度，不伸缩
+            section.innerHTML = `
+            <h3>矩阵 ${String.fromCharCode(65 + i)}</h3>
+            <div class="matrix-controls">
+                <label>行数：</label>
+                <select class="row-select" data-block="matrixBlock${i}">
+                <option value="1">1行</option>
+                <option value="2">2行</option>
+                <option value="3" selected>3行</option>
+                <option value="4">4行</option>
+                <option value="5">5行</option>
+                </select>
+                <label style="margin-left:10px;">列数：</label>
+                <select class="col-select" data-block="matrixBlock${i}">
+                <option value="1">1列</option>
+                <option value="2">2列</option>
+                <option value="3" selected>3列</option>
+                <option value="4">4列</option>
+                <option value="5">5列</option>
+                </select>
+            </div>
+            <div id="matrixBlock${i}" class="matrix-input"></div>
+            <div class="matrix-storage">
+                <select id="slotSelect${i}">
+                <option value="0">存储槽1</option>
+                <option value="1">存储槽2</option>
+                <option value="2">存储槽3</option>
+                <option value="3">存储槽4</option>
+                <option value="4">存储槽5</option>
+                <option value="5">存储槽6</option>
+                <option value="6">存储槽7</option>
+                <option value="7">存储槽8</option>
+                <option value="8">存储槽9</option>
+                </select>
+                <button onclick="saveMatrixFromBlock('matrixBlock${i}', 'slotSelect${i}')">保存</button>
+                <button onclick="loadMatrixToBlock('matrixBlock${i}', 'slotSelect${i}')">载入</button>
+            </div>
+            `;
+            matrixContainer.appendChild(section);
+
+            // 为选择器添加事件监听
+            const rowSelect = section.querySelector('.row-select');
+            const colSelect = section.querySelector('.col-select');
+
+            const updateMatrix = () => {
+                const blockId = rowSelect.dataset.block;
+                generateMatrixInputs(blockId, section);
+            };
+
+            rowSelect.addEventListener('change', updateMatrix);
+            colSelect.addEventListener('change', updateMatrix);
+
+            // 初始生成矩阵
+            updateMatrix();
+            }
+
+            // 创建结果模块，始终在右侧
+            const calcContainer = document.createElement('div');
+            calcContainer.className = 'matrix-section';
+            calcContainer.style.flex = '0 0 300px'; // 固定宽度，不伸缩
+            calcContainer.innerHTML = `
+            <h3>计算结果</h3>
+            <button onclick="runCalculation()" style="width:auto; margin-right:10px;">计算</button>
+            <select id="resultSlot" style="width:auto;">
+            <option value="0">存储槽1</option>
+            <option value="1">存储槽2</option>
+            <option value="2">存储槽3</option>
+            <option value="3">存储槽4</option>
+            <option value="4">存储槽5</option>
+            <option value="5">存储槽6</option>
+            <option value="6">存储槽7</option>
+            <option value="7">存储槽8</option>
+            <option value="8">存储槽9</option>
+            </select>
+            <button id="storeResultBtn" onclick="storeResultToSlot()" style="width:auto;">存储结果</button>
+            <div id="calcResult" style="margin-top:10px; background:#f3f3f3; padding:10px; min-height:50px;">
+            等待计算...
+            </div>
+            `;
+            flexContainer.appendChild(calcContainer);
+            
+            // 加载目标标签页状态
+            loadTabState(operation);
+        }
+
+        function getOperationName(operation) {
+            const ops = {
+                'det': '行列式',
+                'inv': '逆矩阵',
+                'trans': '转置',
+                'add': '加法',
+                'sub': '减法',
+                'mul': '乘法',
+                'pow': '幂运算'
+            };
+            return ops[operation] || '';
+        }
+
+        function storeResultToSlot() {
+            const slot = parseInt(document.getElementById('resultSlot').value);
+
+            if (currentResult === null) {
+                alert('没有可保存的结果');
+                return;
+            }
+
+            try {
+                // 如果是标量结果(行列式)，转换为1x1矩阵存储
+                if (typeof currentResult === 'number') {
+                    matrixSlots[slot] = [[currentResult]];
+                    alert(`标量结果 ${currentResult} 已存储到存储槽 ${slot + 1}`);
+                    return;
+                }
+
+                // 如果是矩阵结果
+                if (Array.isArray(currentResult)) {
+                    matrixSlots[slot] = JSON.parse(JSON.stringify(currentResult)); // 深拷贝
+                    alert(`矩阵已存储到存储槽 ${slot + 1}`);
+                    return;
+                }
+
+                throw new Error('无效的结果类型');
+            } catch (error) {
+                alert('保存失败: ' + error.message);
+            }
+        }
+
+        function displayMatrix(matrix, containerId) {
+            const container = document.getElementById(containerId);
+            if (typeof matrix === 'number') {
+                container.innerHTML = `计算结果: ${matrix}`;
+                return;
+            }
+
+            let html = '<table style="margin:auto;">';
+            for (let row of matrix) {
+                html += '<tr>';
+                for (let val of row) {
+                    html += `<td style="padding:5px;">${Number(val.toFixed(4))}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            container.innerHTML = html;
+        }
+        
+        function generateMatrixInputs(blockId, parentEl) {
+            const rowSelect = parentEl.querySelector('.row-select');
+            const colSelect = parentEl.querySelector('.col-select');
+            const rows = parseInt(rowSelect.value);
+            const cols = parseInt(colSelect.value);
+            const container = document.getElementById(blockId);
+
+            let html = '<table style="margin:10px auto;">';
+            for (let i = 0; i < rows; i++) {
+                html += '<tr>';
+                for (let j = 0; j < cols; j++) {
+                    html += `
+                    <td>
+                        <input type="number" 
+                               style="width:60px;" 
+                               placeholder="a[${i + 1},${j + 1}]">
+                    </td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // 示例：获取指定矩阵块内容
+        function getMatrixFromBlock(blockId) {
+            const block = document.getElementById(blockId);
+            const rows = block.querySelectorAll('tr').length;
+            const cols = rows ? block.querySelector('tr').querySelectorAll('input').length : 0;
+            const matrix = [];
+
+            for (let r = 0; r < rows; r++) {
+                const row = [];
+                const inputs = block.querySelectorAll(`tr:nth-child(${r + 1}) input`);
+                for (let c = 0; c < cols; c++) {
+                    row.push(Number(inputs[c].value) || 0);
+                }
+                matrix.push(row);
+            }
+            return matrix;
+        }
+
+        function runCalculation() {
+            try {
+                const matA = getMatrixFromBlock('matrixBlock0');
+                let result;
+
+                switch (currentOperation) {
+                    case 'det':
+                        if (!isSquareMatrix(matA)) {
+                            throw new Error("行列式计算需要方阵");
+                        }
+                        result = calculateDeterminant(matA);
+                        currentResult = result;
+                        document.getElementById('calcResult').textContent = `行列式值: ${result}`;
+                        break;
+
+                    case 'inv':
+                        if (!isSquareMatrix(matA)) {
+                            throw new Error("求逆需要方阵");
+                        }
+                        const det = calculateDeterminant(matA);
+                        if (Math.abs(det) < 1e-10) {
+                            throw new Error("矩阵不可逆");
+                        }
+                        result = calculateInverse(matA);
+                        currentResult = result;
+                        displayMatrix(result, 'calcResult');
+                        break;
+
+                    case 'trans':
+                        result = transpose(matA);
+                        currentResult = result;
+                        displayMatrix(result, 'calcResult');
+                        break;
+
+                    case 'add':
+                    case 'sub':
+                    case 'mul':
+                        const matB = getMatrixFromBlock('matrixBlock1');
+                        if (currentOperation === 'mul') {
+                            result = multiplyMatrices(matA, matB);
+                        } else {
+                            if (!haveSameSize(matA, matB)) {
+                                throw new Error("矩阵大小不匹配");
+                            }
+                            result = currentOperation === 'add' ?
+                                addMatrices(matA, matB) :
+                                subtractMatrices(matA, matB);
+                        }
+                        currentResult = result;
+                        displayMatrix(result, 'calcResult');
+                        break;
+                        
+                    case 'pow':
+                        if (!isSquareMatrix(matA)) {
+                            throw new Error("幂运算需要方阵");
+                        }
+                        const power = parseInt(prompt("请输入幂次(非负整数):", "2"));
+                        if (isNaN(power) || power < 0) {
+                            throw new Error("请输入有效的非负整数幂次");
+                        }
+                        result = matrixPower(matA, power);
+                        currentResult = result;
+                        displayMatrix(result, 'calcResult');
+                        break;
+                }
+            } catch (error) {
+                document.getElementById('calcResult').textContent = `错误: ${error.message}`;
+            }
+        }
+
+        function calculateDeterminant(matrix) {
+            const n = matrix.length;
+            if (n === 1) return matrix[0][0];
+            if (n === 2) {
+                return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            }
+
+            let det = 0;
+            for (let j = 0; j < n; j++) {
+                det += Math.pow(-1, j) * matrix[0][j] * calculateDeterminant(getMinor(matrix, 0, j));
+            }
+            return det;
+        }
+
+        function calculateInverse(matrix) {
+            const n = matrix.length;
+            const det = calculateDeterminant(matrix);
+            const adjugate = calculateAdjugate(matrix);
+            return adjugate.map(row => row.map(val => val / det));
+        }
+
+        function calculateAdjugate(matrix) {
+            const n = matrix.length;
+            const adj = Array(n).fill().map(() => Array(n).fill(0));
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    const sign = Math.pow(-1, i + j);
+                    const minor = getMinor(matrix, i, j);
+                    adj[j][i] = sign * calculateDeterminant(minor); // 注意这里[j][i]是转置
+                }
+            }
+            return adj;
+        }
+
+        function getMinor(matrix, row, col) {
+            return matrix
+                .filter((_, index) => index !== row)
+                .map(row => row.filter((_, index) => index !== col));
+        }
+
+        function transpose(matrix) {
+            return matrix[0].map((_, i) => matrix.map(row => row[i]));
+        }
+
+        function addMatrices(a, b) {
+            return a.map((row, i) => row.map((val, j) => val + b[i][j]));
+        }
+
+        function subtractMatrices(a, b) {
+            return a.map((row, i) => row.map((val, j) => val - b[i][j]));
+        }
+
+        function isSquareMatrix(matrix) {
+            return matrix.length === matrix[0].length;
+        }
+
+        function haveSameSize(a, b) {
+            return a.length === b.length && a[0].length === b[0].length;
+        }
+
+        function displayMatrix(matrix, containerId) {
+            const container = document.getElementById(containerId);
+            let html = '<table style="margin:auto;">';
+            for (let row of matrix) {
+                html += '<tr>';
+                for (let val of row) {
+                    html += `<td style="padding:5px;">${Number(val.toFixed(4))}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function saveMatrixFromBlock(blockId, slotSelectId) {
+            try {
+                const matrix = getMatrixFromBlock(blockId);
+                const slot = document.getElementById(slotSelectId).value;
+                matrixSlots[slot] = matrix;
+                alert(`已保存到存储槽 ${parseInt(slot) + 1}`);
+            } catch (e) {
+                alert('保存失败: ' + e.message);
+            }
+        }
+
+        function loadMatrixToBlock(blockId, slotSelectId) {
+            try {
+                const slot = document.getElementById(slotSelectId).value;
+                const matrix = matrixSlots[slot];
+                if (!matrix) {
+                    throw new Error('存储槽为空');
+                }
+
+                // 更新选择器值以匹配矩阵维度
+                const section = document.getElementById(blockId).closest('.matrix-section');
+                const selects = section.querySelectorAll('select');
+                selects[0].value = matrix.length;
+                selects[1].value = matrix[0].length;
+
+                // 重新生成矩阵输入框并填充值
+                generateMatrixInputs(blockId, selects[0].parentElement);
+                const inputs = document.getElementById(blockId).querySelectorAll('input');
+                let idx = 0;
+                for (let i = 0; i < matrix.length; i++) {
+                    for (let j = 0; j < matrix[0].length; j++) {
+                        inputs[idx++].value = matrix[i][j];
+                    }
+                }
+                // alert(`已从存储槽 ${parseInt(slot) + 1} 载入数据`);
+            } catch (e) {
+                alert('载入失败: ' + e.message);
+            }
+        }
+
+        function generateMatrixInputs(blockId, parentEl) {
+            const selects = parentEl.querySelectorAll('select');
+            const rows = parseInt(selects[0].value);
+            const cols = parseInt(selects[1].value);
+            const container = document.getElementById(blockId);
+
+            let html = '<table>';
+            for (let i = 0; i < rows; i++) {
+                html += '<tr>';
+                for (let j = 0; j < cols; j++) {
+                    html += `<td><input type="number" placeholder="a[${i + 1},${j + 1}]"></td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // 矩阵乘法函数
+        function multiplyMatrices(a, b) {
+            if (a[0].length !== b.length) {
+                throw new Error("矩阵维度不匹配，无法相乘");
+            }
+            
+            const result = Array(a.length).fill().map(() => Array(b[0].length).fill(0));
+            
+            for (let i = 0; i < a.length; i++) {
+                for (let j = 0; j < b[0].length; j++) {
+                    for (let k = 0; k < b.length; k++) {
+                        result[i][j] += a[i][k] * b[k][j];
+                    }
+                }
+            }
+            return result;
+        }
+
+        // 矩阵乘方函数
+        function matrixPower(matrix, power) {
+            if (!isSquareMatrix(matrix)) {
+                throw new Error("只能对方阵进行幂运算");
+            }
+            if (power < 0) {
+                throw new Error("暂不支持负数幂");
+            }
+            if (power === 0) {
+                // 返回单位矩阵
+                return Array(matrix.length).fill().map((_, i) => 
+                    Array(matrix.length).fill().map((_, j) => i === j ? 1 : 0)
+                );
+            }
+            
+            let result = matrix;
+            for (let i = 1; i < power; i++) {
+                result = multiplyMatrices(result, matrix);
+            }
+            return result;
+        }
+    </script>
+</body>
+
+</html>

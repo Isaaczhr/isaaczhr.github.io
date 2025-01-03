@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             --dark-bg: #111;
             --dark-color: #ccc;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -20,22 +22,26 @@
             text-align: center;
             transition: all 0.3s ease;
         }
+
         @media (prefers-color-scheme: dark) {
             body {
                 background: var(--dark-bg);
                 color: var(--dark-color);
             }
+
             .content {
                 background: #222;
                 color: #ccc;
             }
         }
+
         .header {
             background-color: #4CAF50;
             color: #fff;
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -44,14 +50,17 @@
             padding: 20px;
             max-width: 1200px;
         }
+
         h1 {
             font-size: 3em;
             margin: 0;
         }
+
         p {
             font-size: 1.2em;
             margin: 10px 0 20px;
         }
+
         .button {
             padding: 15px 30px;
             font-size: 1em;
@@ -63,12 +72,15 @@
             text-decoration: none;
             transition: background-color 0.3s;
         }
+
         .button:hover {
             background-color: #ff1c2e;
         }
+
         .social-icons {
             margin-top: 20px;
         }
+
         .social-icons a {
             color: #4CAF50;
             font-size: 1.2em;
@@ -76,16 +88,20 @@
             margin: 0 10px;
             transition: transform 0.3s;
         }
+
         .social-icons a:hover {
             transform: scale(1.2);
         }
+
         .language-switch {
             margin-top: 20px;
             text-align: center;
         }
+
         .language-switch p {
             margin: 5px 0;
         }
+
         .custom-dropdown {
             position: relative;
             display: inline-block;
@@ -118,7 +134,7 @@
             position: absolute;
             background-color: #fff;
             min-width: 100px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             border-radius: 4px;
             margin-top: 5px;
             z-index: 1;
@@ -145,6 +161,7 @@
             text-decoration: none;
             transition: color 0.3s ease;
         }
+
         a:hover {
             color: #45a049;
             text-decoration: underline;
@@ -160,16 +177,19 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .content h2 {
             color: #333;
             border-bottom: 2px solid #99f2c8;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
+
         .content p {
             font-size: 18px;
             line-height: 1.6;
         }
+
         .profile-img {
             float: left;
             margin-right: 20px;
@@ -177,49 +197,58 @@
             width: 150px;
             height: 150px;
         }
+
         .clearfix::after {
             content: "";
             display: table;
             clear: both;
         }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
             }
+
             .button {
                 padding: 10px 20px;
                 font-size: 0.9em;
             }
+
             .profile-img {
                 float: none;
                 display: block;
                 margin: 0 auto 20px;
             }
+
             .container {
                 width: 95%;
             }
         }
+
         .content section {
             min-width: 700px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
+
         @media (max-width: 768px) {
             .content section {
                 min-width: auto;
                 padding: 10px 0;
             }
         }
+
         /* 卡片容器样式 */
         .card-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
-            gap: 20px; 
-            align-items: flex-start; 
+            gap: 20px;
+            align-items: flex-start;
         }
+
         .card {
             background-color: #fff;
             color: #333;
@@ -227,20 +256,26 @@
             margin: 20px;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
             text-align: left;
             min-width: 250px;
-            max-width: 400px; 
+            max-width: 400px;
         }
+
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
-        .card h2, .card p, .card ul {
+
+        .card h2,
+        .card p,
+        .card ul {
             margin: 20px;
         }
-        [data-lang="zh"], [data-lang="en"] {
+
+        [data-lang="zh"],
+        [data-lang="en"] {
             display: none;
         }
     </style>
@@ -260,17 +295,33 @@
         });
     </script>
 </head>
+
 <body>
     <div class="container">
         <h1 data-lang="zh">欢迎来到我的个人主页</h1>
         <h1 data-lang="en" style="display:none;">Welcome to My Personal Homepage</h1>
         <p data-lang="zh">我是周浩然，这里是我的个人主页。</p>
         <p data-lang="en" style="display:none;">I am Zhou Haoran, this is my personal homepage.</p>
-        <a href="https://github.com/Isaaczhr/"  target="_blank" class="button" data-lang="zh">了解更多关于我</a>
-        <a href="https://github.com/Isaaczhr/"  target="_blank" class="button" data-lang="en" style="display:none;">Learn more about me</a>
+        <a href="https://github.com/Isaaczhr/" target="_blank" class="button" data-lang="zh">了解更多关于我</a>
+        <a href="https://github.com/Isaaczhr/" target="_blank" class="button" data-lang="en" style="display:none;">Learn
+            more about me</a>
     </div>
 
     <div class="card-container">
+        <div class="card">
+            <h2 data-lang="zh">工具箱</h2>
+            <h2 data-lang="en" style="display:none;">Toolbox</h2>
+            <ul data-lang="zh">
+                <li>
+                    <a href="./xxds.html" target="_blank">线性代数工具箱</a>
+                </li>
+            </ul>
+            <ul data-lang="en" style="display:none;">
+                <li>
+                    <a href="./xxds.html" target="_blank">Linear Algebra Toolbox</a>
+                </li>
+            </ul>
+        </div>
         <div class="card">
             <h2 data-lang="zh">关于我</h2>
             <h2 data-lang="en" style="display:none;">About Me</h2>
@@ -338,7 +389,7 @@
         dropdown.addEventListener('click', () => {
             dropdown.classList.toggle('show');
         });
-        window.onclick = function(e) {
+        window.onclick = function (e) {
             if (!e.target.matches('#currentLang')) {
                 if (dropdown.classList.contains('show')) {
                     dropdown.classList.remove('show');
@@ -353,4 +404,5 @@
         });
     </script>
 </body>
+
 </html>
